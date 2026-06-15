@@ -1,0 +1,21 @@
+
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace" },
+  { id = "end-of-file-fixer" },
+  { id = "check-json" },
+  { id = "check-yaml" },
+  { id = "check-toml" },
+  { id = "check-merge-conflict" },
+  { id = "detect-private-key" },
+]
+
+
+[[repos]]
+repo = "local"
+hooks = [
+  { id = "format", name = "Biome format", language = "system", entry = "pnpm format", priority = 0, pass_filenames = false },
+  { id = "typecheck", name = "Typecheck", language = "system", entry = "pnpm tsc", priority = 10, files = "\\.tsx?$", pass_filenames = false },
+  { id = "tests", name = "Unit tests", language = "system", entry = "pnpm test", priority = 20, pass_filenames = false },
+]

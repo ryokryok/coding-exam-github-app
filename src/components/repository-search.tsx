@@ -2,11 +2,11 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  type SubmitEvent,
   useCallback,
   useEffect,
   useRef,
   useState,
-  type SubmitEvent,
 } from "react";
 import { searchRepositoriesAction } from "@/actions/repositories";
 import type { RepositoryListItem } from "@/lib/github/repository";

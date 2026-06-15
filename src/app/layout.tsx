@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import type { ReactNode } from "react";
+import { PageHeader } from "@/components/page-header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GitHub リポジトリ検索",
+  title: "Repo Digger",
   description: "GitHub のリポジトリを検索・閲覧できるアプリ",
 };
 
@@ -28,7 +29,14 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <div className="flex flex-1 flex-col bg-white dark:bg-black">
+          <PageHeader title="Repo Digger" />
+          <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   );
 }

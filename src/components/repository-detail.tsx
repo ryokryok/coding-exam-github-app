@@ -1,4 +1,7 @@
 import Image from "next/image";
+import type { IconType } from "react-icons";
+import { CgEye, CgGitFork } from "react-icons/cg";
+import { VscIssues, VscStarEmpty } from "react-icons/vsc";
 import { type FragmentType, graphql, useFragment } from "@/lib/gql";
 
 export const RepositoryDetailFragment = graphql(`
@@ -24,9 +27,18 @@ export const RepositoryDetailFragment = graphql(`
   }
 `);
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: IconType;
+  label: string;
+  value: number;
+}) {
   return (
     <div className="flex flex-col items-center gap-1">
+      <Icon aria-hidden className="text-4xl text-zinc-400 dark:text-zinc-500" />
       <span className="text-sm text-zinc-500">{label}</span>
       <span className="text-2xl font-semibold text-black dark:text-zinc-50">
         {value.toLocaleString()}
@@ -67,17 +79,11 @@ export function RepositoryDetail({
         </div>
       </div>
 
-      {repo.description && (
-        <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-          {repo.description}
-        </p>
-      )}
-
       <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
-        <Stat label="Star数" value={repo.stargazerCount} />
-        <Stat label="Watcher数" value={repo.watchers.totalCount} />
-        <Stat label="Fork数" value={repo.forkCount} />
-        <Stat label="Issue数" value={repo.issues.totalCount} />
+        <Stat icon={VscStarEmpty} label="Star" value={repo.stargazerCount} />
+        <Stat icon={CgEye} label="Watcher" value={repo.watchers.totalCount} />
+        <Stat icon={CgGitFork} label="Fork" value={repo.forkCount} />
+        <Stat icon={VscIssues} label="Issue" value={repo.issues.totalCount} />
       </div>
     </>
   );

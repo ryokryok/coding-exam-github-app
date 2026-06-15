@@ -1,40 +1,81 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type SubmitEvent,
+} from "react";
 import { searchRepositoriesAction } from "@/actions/repositories";
 import type { RepositoryListItem } from "@/lib/github/repository";
 import { RepositoryCard } from "./repository-card";
 
 type Status = "idle" | "loading" | "loadingMore" | "error";
 
+/** 検索文字列を保持する URL クエリパラメーター名。 */
+const QUERY_PARAM = "q";
+
 export function RepositorySearch() {
-  const [input, setInput] = useState("");
-  const [query, setQuery] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // 検索語は URL（?q=...）を単一の真実とする。共有・リロード・戻る/進むで
+  // 同じ検索結果を再現できる。
+  const query = searchParams.get(QUERY_PARAM)?.trim() ?? "";
+
+  const [input, setInput] = useState(query);
   const [items, setItems] = useState<RepositoryListItem[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [count, setCount] = useState(0);
   const [status, setStatus] = useState<Status>("idle");
 
-  const runSearch = async (event: React.FormEvent) => {
+  // フォーム送信時は URL を書き換えるだけ。実際の検索は下の effect が
+  // URL の変化を検知して実行する。
+  const runSearch = (event: SubmitEvent) => {
     event.preventDefault();
     const trimmed = input.trim();
     if (trimmed === "") return;
 
-    setQuery(trimmed);
+    const params = new URLSearchParams();
+    params.set(QUERY_PARAM, trimmed);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  // URL の検索語が変わるたびに1ページ目を取得する。初回マウント時
+  // （共有 URL でのアクセス）にも走る。
+  useEffect(() => {
+    if (query === "") {
+      setItems([]);
+      setCursor(null);
+      setHasNextPage(false);
+      setCount(0);
+      setStatus("idle");
+      return;
+    }
+
+    let cancelled = false;
     setStatus("loading");
     setItems([]);
-    try {
-      const result = await searchRepositoriesAction(trimmed);
-      setItems(result.repositories);
-      setCursor(result.pageInfo.endCursor);
-      setHasNextPage(result.pageInfo.hasNextPage);
-      setCount(result.repositoryCount);
-      setStatus("idle");
-    } catch {
-      setStatus("error");
-    }
-  };
+    searchRepositoriesAction(query)
+      .then((result) => {
+        if (cancelled) return;
+        setItems(result.repositories);
+        setCursor(result.pageInfo.endCursor);
+        setHasNextPage(result.pageInfo.hasNextPage);
+        setCount(result.repositoryCount);
+        setStatus("idle");
+      })
+      .catch(() => {
+        if (!cancelled) setStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
 
   // 取得中フラグ。IntersectionObserver が連続発火しても同一カーソルで
   // 多重フェッチ（→重複アイテム）しないようにガードする。

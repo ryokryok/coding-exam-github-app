@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import * as v from "valibot";
+import { BackLink } from "@/components/back-link";
 import { PageHeader } from "@/components/page-header";
 import { RepositoryDetail } from "@/components/repository-detail";
 import { getRepository } from "@/lib/github/repository";
@@ -28,12 +28,12 @@ export default async function RepositoryDetailPage({ params }: PageProps) {
     <div className="flex flex-1 flex-col bg-white dark:bg-black">
       <PageHeader title="リポジトリ詳細" />
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
-        <Link
-          href="/"
+        <BackLink
+          fallbackPath="/"
           className="text-sm text-zinc-500 transition-colors hover:text-black dark:hover:text-zinc-50"
         >
-          ← トップページへ戻る
-        </Link>
+          ← 検索結果へ戻る
+        </BackLink>
 
         <RepositoryDetail repository={repository} />
       </main>

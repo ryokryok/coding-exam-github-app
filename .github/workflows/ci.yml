@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - "**.md"
       - "LICENSE"
-      - .devcontainer/devcontainer.json
+      - .devcontainer/devcontainer.jsonc
 
 permissions:
   contents: read

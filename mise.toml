@@ -6,3 +6,7 @@ prek = "latest"
 [tasks.precommit]
 description = "Run all pre-commit hooks via prek"
 run = "prek run"
+
+[tasks.download-schema]
+description = "Download GraphQL schema from github.com"
+run = "curl -O https://docs.github.com/public/fpt/schema.docs.graphql"

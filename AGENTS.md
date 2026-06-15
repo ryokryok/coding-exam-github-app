@@ -14,9 +14,16 @@ pnpm build          # production build
 pnpm start          # serve the production build
 pnpm lint           # Biome check (lint + import organization)
 pnpm format         # Biome format, writing changes
+pnpm test           # Vitest (run mode)
+pnpm codegen        # graphql-codegen --watch (regenerates src/lib/gql/)
+
+mise run download-schema   # download GitHub's public GraphQL schema -> schema.docs.graphql
 ```
 
-There is no test runner configured yet.
+`schema.docs.graphql` is **not committed** (git-ignored). Run `mise run download-schema`
+once after cloning to fetch it locally before running `pnpm codegen`. The generated
+`src/lib/gql/` output **is** committed, so `pnpm codegen` is only needed when GraphQL
+documents change.
 
 ## Architecture & conventions
 

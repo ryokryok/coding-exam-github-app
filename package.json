@@ -6,24 +6,33 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "codegen": "graphql-codegen --watch",
     "lint": "biome check",
     "format": "biome format --write",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "graphql": "^16.14.2",
     "next": "16.2.7",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "urql": "^5.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@graphql-codegen/cli": "^7.1.2",
+    "@graphql-codegen/client-preset": "^6.0.1",
+    "@parcel/watcher": "^2.5.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "msw": "^2.14.6",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "valibot": "^1.4.1",
     "vitest": "^4.1.9"
   }
 }

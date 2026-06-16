@@ -1,6 +1,7 @@
 import { graphql, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { fetchExchange } from "urql";
+import * as v from "valibot";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { RepositoryCardFragment } from "@/components/repository-card";
 import { RepositoryDetailFragment } from "@/components/repository-detail";
@@ -12,7 +13,11 @@ import {
   type SearchRepositoriesQuery,
 } from "@/lib/gql/graphql";
 import { createGitHubClient } from "./client";
-import { getRepository, searchRepositories } from "./repository";
+import {
+  getRepository,
+  searchRepositories,
+  searchRepositoriesByPage,
+} from "./repository";
 
 const TEST_ENDPOINT_URL = "https://graphql.example.com/graphql";
 const TEST_AVATAR_URL = "https://avatars.example.com/dummy-owner.png";
@@ -168,11 +173,11 @@ describe("searchRepositories", () => {
   });
 
   it.each([0, 101, 5.5, -1])(
-    "first が範囲外(%s)なら RangeError を投げる",
+    "first が範囲外(%s)なら ValiError を投げる",
     async (first) => {
       await expect(
         searchRepositories("dummy", { first, client: client() }),
-      ).rejects.toThrow(RangeError);
+      ).rejects.toThrow(v.ValiError);
     },
   );
 
@@ -186,6 +191,50 @@ describe("searchRepositories", () => {
     await expect(
       searchRepositories("dummy", { client: client() }),
     ).rejects.toThrow(/Bad credentials/);
+  });
+});
+
+describe("searchRepositoriesByPage", () => {
+  it("1ページ目は after カーソルを渡さない", async () => {
+    let captured: Record<string, unknown> | undefined;
+    server.use(
+      github.query(SearchRepositoriesDocument, ({ variables }) => {
+        captured = variables;
+        return HttpResponse.json({ data: searchData() });
+      }),
+    );
+
+    await searchRepositoriesByPage("dummy", 1, { client: client() });
+
+    expect(captured?.after).toBeUndefined();
+  });
+
+  it("ページ番号から after カーソル（base64 の cursor:<offset>）を組み立てる", async () => {
+    let captured: Record<string, unknown> | undefined;
+    server.use(
+      github.query(SearchRepositoriesDocument, ({ variables }) => {
+        captured = variables;
+        return HttpResponse.json({ data: searchData() });
+      }),
+    );
+
+    // 3ページ目・1ページ10件 → オフセット20。
+    await searchRepositoriesByPage("dummy", 3, { client: client() });
+
+    expect(captured?.after).toBe(Buffer.from("cursor:20").toString("base64"));
+  });
+
+  it("空クエリでは検索せず空の結果を返す", async () => {
+    // ハンドラ未登録。onUnhandledRequest: "error" なので、通信が起きれば失敗する。
+    const result = await searchRepositoriesByPage("   ", 1, {
+      client: client(),
+    });
+
+    expect(result).toEqual({
+      repositoryCount: 0,
+      repositories: [],
+      pageInfo: { endCursor: null, hasNextPage: false },
+    });
   });
 });
 

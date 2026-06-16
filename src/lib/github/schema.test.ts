@@ -1,6 +1,19 @@
 import * as v from "valibot";
 import { describe, expect, it } from "vitest";
-import { RepositoryParamsSchema } from "./schema";
+import { RepositoryParamsSchema, SearchPageSizeSchema } from "./schema";
+
+describe("SearchPageSizeSchema", () => {
+  it.each([1, 10, 100])("1〜100 の整数 %i を受け入れる", (first) => {
+    const result = v.safeParse(SearchPageSizeSchema, first);
+    expect(result.success).toEqual(true);
+    expect(result.output).toEqual(first);
+  });
+
+  it.each([0, 101, 5.5, -1])("範囲外の値 %o を拒否する", (first) => {
+    const result = v.safeParse(SearchPageSizeSchema, first);
+    expect(result.success).toEqual(false);
+  });
+});
 
 describe("RepositoryParamsSchema", () => {
   it.each([

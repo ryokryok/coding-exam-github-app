@@ -1,7 +1,9 @@
 import type { Client } from "urql";
+import * as v from "valibot";
 import { graphql } from "@/lib/gql";
 import { githubClient } from "./client";
-import { DEFAULT_SEARCH_PAGE_SIZE, MAX_SEARCH_PAGE_SIZE } from "./constants";
+import { DEFAULT_SEARCH_PAGE_SIZE } from "./constants";
+import { SearchPageSizeSchema } from "./schema";
 
 // 表示に必要なフィールドは各コンポーネントの Fragment に colocate している
 // （RepositoryCard / RepositoryDetail）。ここではそれらを spread するだけ。
@@ -42,7 +44,7 @@ const GetRepositoryQuery = graphql(`
  * @param options.after - 続きを取得するためのカーソル（前回の `endCursor`）。
  * @param options.client - 使用する urql クライアント（既定: 共有クライアント）。
  * @returns マッチ総数・リポジトリ一覧・ページング情報。
- * @throws first が 1〜100 の範囲外の場合。
+ * @throws first が 1〜100 の整数でない場合（`ValiError`）。
  */
 export async function searchRepositories(
   query: string,
@@ -58,16 +60,13 @@ export async function searchRepositories(
     client = githubClient,
   } = options;
 
-  if (!Number.isInteger(first) || first < 1 || first > MAX_SEARCH_PAGE_SIZE) {
-    throw new RangeError(
-      `first は 1〜${MAX_SEARCH_PAGE_SIZE} の整数で指定してください（受け取った値: ${first}）`,
-    );
-  }
+  // first の範囲チェックはスキーマに委譲する（不正値は ValiError）。
+  const validatedFirst = v.parse(SearchPageSizeSchema, first);
 
   const result = await client
     .query(
       SearchRepositoriesQuery,
-      { query, first, after },
+      { query, first: validatedFirst, after },
       { requestPolicy: "network-only" },
     )
     .toPromise();
@@ -89,6 +88,39 @@ export async function searchRepositories(
       hasNextPage: search?.pageInfo.hasNextPage ?? false,
     },
   };
+}
+
+/**
+ * ページ番号（1始まり）を指定してリポジトリを検索する。
+ *
+ * GitHub の検索コネクションのカーソルは `cursor:<1始まりの位置>` を base64 した
+ * もの。これを利用してページ番号から直接 `after` カーソルを構築することで、前ページ
+ * を辿らずに任意のページ（例: `?page=5`）へ直接アクセスできる。
+ *
+ * @param query - 検索クエリ。空文字なら検索せず空の結果を返す。
+ * @param page - 取得するページ（1始まり、既定: 1）。
+ * @param options.client - 使用する urql クライアント（既定: 共有クライアント）。
+ * @returns マッチ総数・リポジトリ一覧・ページング情報。
+ */
+export async function searchRepositoriesByPage(
+  query: string,
+  page = 1,
+  options: { client?: Client } = {},
+): Promise<SearchRepositoriesResult> {
+  const trimmed = query.trim();
+  if (trimmed === "") {
+    return {
+      repositoryCount: 0,
+      repositories: [],
+      pageInfo: { endCursor: null, hasNextPage: false },
+    };
+  }
+
+  const offset = (page - 1) * DEFAULT_SEARCH_PAGE_SIZE;
+  const after =
+    offset > 0 ? Buffer.from(`cursor:${offset}`).toString("base64") : undefined;
+
+  return searchRepositories(trimmed, { after, client: options.client });
 }
 
 /**

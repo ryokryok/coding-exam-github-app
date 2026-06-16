@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import * as v from "valibot";
-import { BackLink } from "@/components/back-link";
 import { RepositoryDetail } from "@/components/repository-detail";
 import { getRepository } from "@/lib/github/repository";
 import { RepositoryParamsSchema } from "@/lib/github/schema";
@@ -23,16 +22,5 @@ export default async function RepositoryDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return (
-    <>
-      <BackLink
-        fallbackPath="/"
-        className="text-sm text-zinc-500 transition-colors hover:text-black dark:hover:text-zinc-50"
-      >
-        ← 検索結果へ戻る
-      </BackLink>
-
-      <RepositoryDetail repository={repository} />
-    </>
-  );
+  return <RepositoryDetail repository={repository} />;
 }

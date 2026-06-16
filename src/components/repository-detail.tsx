@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { IconType } from "react-icons";
 import { CgEye, CgGitFork } from "react-icons/cg";
 import { VscIssues, VscStarEmpty } from "react-icons/vsc";
@@ -65,15 +66,12 @@ export function RepositoryDetail({
           className="shrink-0 rounded-full"
         />
         <div className="flex flex-col gap-1">
-          <a
-            href={repo.url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-2xl font-semibold text-black hover:underline dark:text-zinc-50"
-          >
-            {repo.nameWithOwner}
-          </a>
-          <span className="text-zinc-500">
+          <Link href={repo.url} target="_blank" rel="noreferrer">
+            <h2 className="text-2xl font-bold tracking-wider text-black hover:underline dark:text-zinc-50">
+              {repo.nameWithOwner}
+            </h2>
+          </Link>
+          <span className="text-zinc-500 tracking-wide">
             {repo.primaryLanguage?.name ?? "言語不明"}
           </span>
         </div>

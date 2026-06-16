@@ -38,7 +38,7 @@ const GetRepositoryQuery = graphql(`
  * 取得できない点に注意。
  *
  * @param query - 検索クエリ（例: `"next.js stars:>1000"`）。
- * @param options.first - 取得する件数（1〜100、既定: 20）。
+ * @param options.first - 取得する件数（1〜100、既定: 10）。
  * @param options.after - 続きを取得するためのカーソル（前回の `endCursor`）。
  * @param options.client - 使用する urql クライアント（既定: 共有クライアント）。
  * @returns マッチ総数・リポジトリ一覧・ページング情報。

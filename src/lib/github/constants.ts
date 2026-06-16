@@ -5,7 +5,7 @@ export const GITHUB_GRAPHQL_ENDPOINT = "https://api.github.com/graphql";
 export const MAX_SEARCH_PAGE_SIZE = 100;
 
 /** `first` 未指定時の既定件数。 */
-export const DEFAULT_SEARCH_PAGE_SIZE = 20;
+export const DEFAULT_SEARCH_PAGE_SIZE = 10;
 
 /** owner（ユーザー名・組織名）の命名規則。先頭・末尾はハイフン不可、最大39文字。 */
 export const OWNER_NAME_PATTERN = /^[a-zA-Z0-9](?:-?[a-zA-Z0-9]){0,38}$/;

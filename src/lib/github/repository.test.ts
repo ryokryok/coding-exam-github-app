@@ -14,14 +14,11 @@ import {
 import { createGitHubClient } from "./client";
 import { getRepository, searchRepositories } from "./repository";
 
-// 型安全な操作のため、生成された TypedDocumentNode を graphql.link 経由で渡す。
-// Fragment Masking 下では makeFragmentData でモックデータを作る。
-// https://mswjs.io/docs/api/graphql
-// https://the-guild.dev/graphql/codegen/plugins/presets/preset-client
-const github = graphql.link("https://api.github.com/graphql");
-
-// テスト用とひと目で分かる架空の値。
+const TEST_ENDPOINT_URL = "https://graphql.example.com/graphql";
 const TEST_AVATAR_URL = "https://avatars.example.com/dummy-owner.png";
+
+// msw が横取りするテスト用エンドポイント。
+const github = graphql.link(TEST_ENDPOINT_URL);
 
 // 検索結果ノード = id（キー用） + RepositoryCard フラグメント。
 const searchNode = (id = "DUMMY_REPO_ID_1") => ({
@@ -69,9 +66,13 @@ beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-// キャッシュを無効化（fetchExchange のみ）したテスト用クライアント。
+// キャッシュ無効（fetchExchange のみ）のテスト用クライアント。
 const client = () =>
-  createGitHubClient({ token: "test-token", exchanges: [fetchExchange] });
+  createGitHubClient({
+    token: "test-token",
+    url: TEST_ENDPOINT_URL,
+    exchanges: [fetchExchange],
+  });
 
 describe("searchRepositories", () => {
   it("検索クエリと件数を渡し、結果を整形して返す", async () => {
@@ -106,7 +107,7 @@ describe("searchRepositories", () => {
     });
   });
 
-  it("first を省略すると既定値 20 を使う", async () => {
+  it("first を省略すると既定値 10 を使う", async () => {
     let captured: Record<string, unknown> | undefined;
     server.use(
       github.query(SearchRepositoriesDocument, ({ variables }) => {
@@ -117,7 +118,7 @@ describe("searchRepositories", () => {
 
     await searchRepositories("dummy", { client: client() });
 
-    expect(captured).toEqual({ query: "dummy", first: 20 });
+    expect(captured).toEqual({ query: "dummy", first: 10 });
   });
 
   it("after カーソルを渡してページングできる", async () => {
@@ -142,7 +143,7 @@ describe("searchRepositories", () => {
 
     expect(captured).toEqual({
       query: "dummy",
-      first: 20,
+      first: 10,
       after: "dummy-cursor-1",
     });
     expect(result.pageInfo).toEqual({

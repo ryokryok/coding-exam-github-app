@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* sticky なページヘッダーの重なり順。 */
+  --index-header: 30;
+  /* フローティングの「Top へ戻る」ボタンの重なり順。 */
+  --index-back-to-top: 20;
 }
 
 @theme inline {

@@ -17,5 +17,5 @@ export default async function Home({ searchParams }: PageProps) {
 
   // 共通レイアウト（ヘッダー・main ラッパー）は layout.tsx に集約。
   const { q, page } = parsed.output;
-  return <RepositorySearch query={q.trim()} page={page} />;
+  return <RepositorySearch query={q} page={page} />;
 }

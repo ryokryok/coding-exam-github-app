@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "Devcontainer config for guest",
+  "postCreateCommand": "mise trust -- --non-interactive && mise install --yes",
+  "forwardPorts": [3000],
+  "customizations": {
+    "vscode": {
+      "extensions": ["GraphQL.vscode-graphql", "biomejs.biome"]
+    }
+  }
+}

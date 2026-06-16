@@ -3,9 +3,10 @@ name: CI
 on:
   push:
     paths-ignore:
+      - "docs/**"
       - "**.md"
       - "LICENSE"
-      - .devcontainer/devcontainer.jsonc
+      - .devcontainer/devcontainer.json
 
 permissions:
   contents: read

@@ -1,9 +1,6 @@
 // @vitest-environment happy-dom
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { RepositoryListItem } from "@/lib/github/repository";
-import { makeFragmentData } from "@/lib/gql";
-import { RepositoryCardFragment } from "./repository-card";
 import { RepositorySearchView } from "./repository-search-view";
 
 // next/navigation の useRouter/usePathname をモック。
@@ -13,19 +10,12 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
-const makeItem = (id: string, name: string): RepositoryListItem => ({
+const makeItem = (id: string, name: string) => ({
   id,
-  ...makeFragmentData(
-    {
-      name,
-      nameWithOwner: `dummy-owner/${name}`,
-      owner: {
-        login: "dummy-owner",
-        avatarUrl: "https://avatars.example.com/dummy-owner.png",
-      },
-    },
-    RepositoryCardFragment,
-  ),
+  name,
+  nameWithOwner: `dummy-owner/${name}`,
+  ownerLogin: "dummy-owner",
+  avatarUrl: "https://avatars.example.com/dummy-owner.png",
 });
 
 describe("RepositorySearchView", () => {

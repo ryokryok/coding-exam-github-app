@@ -1,7 +1,0 @@
-{
-  "name": "Devcontainer config for guest",
-  "postCreateCommand": "mise trust -- --non-interactive && mise install --yes",
-  "forwardPorts": [
-    3000 // Next.js
-  ]
-}

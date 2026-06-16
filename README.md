@@ -2,6 +2,8 @@
 
 [Next.js](https://nextjs.org) (App Router) ベースの課題用アプリです。
 
+このアプリは GitHub API を用いて、リポジトリを検索、表示するアプリです。
+
 ## 初期設定
 
 このプロジェクトは [mise](https://mise.jdx.dev) でツール（Node.js / pnpm / prek）のバージョンを管理しています。
@@ -37,3 +39,11 @@ mise run download-schema
 # GraphQL ドキュメントから型を再生成 (--watch で変更を監視)
 pnpm codegen
 ```
+
+### VSCodeでの入力補完
+
+`mise run download-schema` で `schema.docs.graphql` を取得しておくと、推奨拡張の `graphql.vscode-graphql` が `graphql.config.ts` 経由でそれを読み込み、GraphQL クエリ編集時に入力補完が効きます
+
+![GraphQL クエリの入力補完の例](docs/assets/vscode-graphql.png)
+
+入力補完が出ない場合は、コマンドパレット（macOS: `Shift + Command + P` / Windows・Linux: `Ctrl + Shift + P`）で `GraphQL: Manual Restart`（`vscode-graphql.restart`）を実行して GraphQL サーバーを再起動してください。

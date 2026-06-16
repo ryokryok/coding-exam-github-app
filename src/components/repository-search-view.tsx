@@ -3,9 +3,8 @@
 import { usePathname, useRouter } from "next/navigation";
 import { type SubmitEvent, useState } from "react";
 import { DEFAULT_SEARCH_PAGE_SIZE } from "@/lib/github/constants";
-import type { RepositoryListItem } from "@/lib/github/repository";
 import { buildSearchPath } from "@/lib/page/search";
-import { RepositoryCard } from "./repository-card";
+import { RepositoryCard, type RepositoryCardData } from "./repository-card";
 import { ResultPagination } from "./result-pagination";
 import { SearchResultCount } from "./search-result-count";
 
@@ -17,7 +16,7 @@ import { SearchResultCount } from "./search-result-count";
  *
  * @param query - 現在の検索語（検証済み）。
  * @param page - 現在のページ（1始まり、検証済み）。
- * @param repositories - 現在ページのリポジトリ一覧。
+ * @param repositories - 現在ページのリポジトリ一覧（カード表示用のプレーンデータ）。
  * @param total - マッチした総件数。
  */
 export function RepositorySearchView({
@@ -28,7 +27,7 @@ export function RepositorySearchView({
 }: {
   query: string;
   page: number;
-  repositories: RepositoryListItem[];
+  repositories: (RepositoryCardData & { id: string })[];
   total: number;
 }) {
   const router = useRouter();
@@ -85,7 +84,12 @@ export function RepositorySearchView({
           <ul className="flex flex-col gap-3">
             {repositories.map((repository) => (
               <li key={repository.id}>
-                <RepositoryCard repository={repository} />
+                <RepositoryCard
+                  name={repository.name}
+                  nameWithOwner={repository.nameWithOwner}
+                  ownerLogin={repository.ownerLogin}
+                  avatarUrl={repository.avatarUrl}
+                />
               </li>
             ))}
           </ul>

@@ -1,12 +1,14 @@
 import type { Client } from "urql";
 import * as v from "valibot";
 import { graphql } from "@/lib/gql";
-import { githubClient } from "./client";
+import { getClient } from "./client";
 import { DEFAULT_SEARCH_PAGE_SIZE } from "./constants";
 import { SearchPageSizeSchema } from "./schema";
 
-// 表示に必要なフィールドは各コンポーネントの Fragment に colocate している
-// （RepositoryCard / RepositoryDetail）。ここではそれらを spread するだけ。
+// 表示に必要なフィールドは Fragment 側で宣言している。検索カードは Client の
+// RepositoryCard が純粋表示に徹するため、その Fragment（RepositoryCard）は取得元の
+// Server Component（RepositorySearch）に定義し unmask する。詳細は RepositoryDetail
+// に colocate。ここではそれらを spread するだけ。
 const SearchRepositoriesQuery = graphql(`
   query SearchRepositories($query: String!, $first: Int!, $after: String) {
     search(query: $query, type: REPOSITORY, first: $first, after: $after) {
@@ -42,7 +44,7 @@ const GetRepositoryQuery = graphql(`
  * @param query - 検索クエリ（例: `"next.js stars:>1000"`）。
  * @param options.first - 取得する件数（1〜100、既定: 10）。
  * @param options.after - 続きを取得するためのカーソル（前回の `endCursor`）。
- * @param options.client - 使用する urql クライアント（既定: 共有クライアント）。
+ * @param options.client - 使用する urql クライアント（既定: リクエスト単位のサーバークライアント）。
  * @returns マッチ総数・リポジトリ一覧・ページング情報。
  * @throws first が 1〜100 の整数でない場合（`ValiError`）。
  */
@@ -57,18 +59,14 @@ export async function searchRepositories(
   const {
     first = DEFAULT_SEARCH_PAGE_SIZE,
     after,
-    client = githubClient,
+    client = getClient(),
   } = options;
 
   // first の範囲チェックはスキーマに委譲する（不正値は ValiError）。
   const validatedFirst = v.parse(SearchPageSizeSchema, first);
 
   const result = await client
-    .query(
-      SearchRepositoriesQuery,
-      { query, first: validatedFirst, after },
-      { requestPolicy: "network-only" },
-    )
+    .query(SearchRepositoriesQuery, { query, first: validatedFirst, after })
     .toPromise();
 
   if (result.error) {
@@ -99,7 +97,7 @@ export async function searchRepositories(
  *
  * @param query - 検索クエリ。空文字なら検索せず空の結果を返す。
  * @param page - 取得するページ（1始まり、既定: 1）。
- * @param options.client - 使用する urql クライアント（既定: 共有クライアント）。
+ * @param options.client - 使用する urql クライアント（既定: リクエスト単位のサーバークライアント）。
  * @returns マッチ総数・リポジトリ一覧・ページング情報。
  */
 export async function searchRepositoriesByPage(
@@ -128,7 +126,7 @@ export async function searchRepositoriesByPage(
  *
  * @param owner - リポジトリのオーナー（ユーザー名または組織名）。
  * @param name - リポジトリ名。
- * @param options.client - 使用する urql クライアント（既定: 共有クライアント）。
+ * @param options.client - 使用する urql クライアント（既定: リクエスト単位のサーバークライアント）。
  * @returns リポジトリ。存在しない場合は `null`。
  */
 export async function getRepository(
@@ -136,14 +134,10 @@ export async function getRepository(
   name: string,
   options: { client?: Client } = {},
 ) {
-  const { client = githubClient } = options;
+  const { client = getClient() } = options;
 
   const result = await client
-    .query(
-      GetRepositoryQuery,
-      { owner, name },
-      { requestPolicy: "network-only" },
-    )
+    .query(GetRepositoryQuery, { owner, name })
     .toPromise();
 
   if (result.error) {

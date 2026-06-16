@@ -14,6 +14,9 @@ importers:
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.14.2)
+      '@urql/next':
+        specifier: ^2.0.1
+        version: 2.0.1(next@16.2.7(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(urql@5.0.2(@urql/core@6.0.1(graphql@16.14.2))(react@19.2.4))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -90,6 +93,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.2
         version: 6.0.2(vite@8.0.16(@types/node@20.19.42)(jiti@2.7.0)(yaml@2.9.0))
+      graphql-config:
+        specifier: ^5.1.6
+        version: 5.1.6(@types/node@20.19.42)(graphql@16.14.2)(typescript@5.9.3)
       happy-dom:
         specifier: ^20.10.4
         version: 20.10.4
@@ -1430,6 +1436,13 @@ packages:
 
   '@urql/core@6.0.1':
     resolution: {integrity: sha512-FZDiQk6jxbj5hixf2rEPv0jI+IZz0EqqGW8mJBEug68/zHTtT+f34guZDmyjJZyiWbj0vL165LoMr/TkeDHaug==}
+
+  '@urql/next@2.0.1':
+    resolution: {integrity: sha512-ddALO9UcmkFKtEbuXK7+34EBGSVy5iPRU9G5R/F/tusLdc7rtFzg9lZj7yRGhDprVBUddfIMLjwrIlgrx0/QTg==}
+    peerDependencies:
+      next: '>=13.0.0'
+      react: '>=18.0.0'
+      urql: ^5.0.0
 
   '@vitejs/plugin-react@6.0.2':
     resolution: {integrity: sha512-DlSMqo4WhThw4vB8Mpn0Woe9J+Jfq1geJ61AKW0QEgLzGMNwtIMdxbDUzLxcun8W7NbJO0e2Jg/Nxm3cCSVzzg==}
@@ -4811,6 +4824,12 @@ snapshots:
       wonka: 6.3.6
     transitivePeerDependencies:
       - graphql
+
+  '@urql/next@2.0.1(next@16.2.7(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)(urql@5.0.2(@urql/core@6.0.1(graphql@16.14.2))(react@19.2.4))':
+    dependencies:
+      next: 16.2.7(@babel/core@7.29.7)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      urql: 5.0.2(@urql/core@6.0.1(graphql@16.14.2))(react@19.2.4)
 
   '@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@20.19.42)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:

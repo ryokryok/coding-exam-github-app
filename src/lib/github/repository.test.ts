@@ -3,8 +3,8 @@ import { setupServer } from "msw/node";
 import { fetchExchange } from "urql";
 import * as v from "valibot";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
-import { RepositoryCardFragment } from "@/components/repository-card";
 import { RepositoryDetailFragment } from "@/components/repository-detail";
+import { RepositoryCardFragment } from "@/components/repository-search";
 import { makeFragmentData } from "@/lib/gql";
 import {
   GetRepositoryDocument,

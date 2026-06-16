@@ -1,3 +1,4 @@
+import { registerUrql } from "@urql/next/rsc";
 import { Client, cacheExchange, type Exchange, fetchExchange } from "urql";
 import { GITHUB_GRAPHQL_ENDPOINT } from "./constants";
 
@@ -39,5 +40,14 @@ export function createGitHubClient(config: GitHubClientConfig = {}): Client {
   });
 }
 
-/** 既定の共有クライアント。 */
-export const githubClient = createGitHubClient();
+/**
+ * Server Component から使う、リクエスト単位でキャッシュされた urql クライアント。
+ *
+ * `@urql/next/rsc` の `registerUrql` は内部で React の `cache()` を使い、同一リクエスト
+ * 内では同じクライアント（＝同じ取得キャッシュ）を共有し、リクエストをまたぐと新しい
+ * クライアントを生成する。これにより SSR 中の取得結果が別リクエストへ漏れない。
+ * トークンなどの環境変数もリクエスト時に評価される。
+ *
+ * @see https://nearform.com/open-source/urql/docs/advanced/server-side-rendering/#nextjs
+ */
+export const { getClient } = registerUrql(() => createGitHubClient());

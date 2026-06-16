@@ -9,6 +9,14 @@ describe("RepositorySearchParamsSchema", () => {
     expect(result.output).toEqual({ q: "", page: 1 });
   });
 
+  it("q の前後の空白を除去する", () => {
+    const result = v.safeParse(RepositorySearchParamsSchema, {
+      q: "  react  ",
+    });
+    expect(result.success).toEqual(true);
+    expect(result.output).toEqual({ q: "react", page: 1 });
+  });
+
   it("page を数値に変換して返す", () => {
     const result = v.safeParse(RepositorySearchParamsSchema, {
       q: "react",

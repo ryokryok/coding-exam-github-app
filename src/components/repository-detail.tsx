@@ -8,7 +8,6 @@ import { type FragmentType, graphql, useFragment } from "@/lib/gql";
 export const RepositoryDetailFragment = graphql(`
   fragment RepositoryDetail on Repository {
     nameWithOwner
-    description
     url
     stargazerCount
     forkCount

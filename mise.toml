@@ -1,3 +1,6 @@
+#:schema https://mise.en.dev/schema/mise.json
+min_version = "2026.6.10"
+
 [tools]
 node = "24"
 pnpm = "10"
@@ -6,6 +9,10 @@ prek = "latest"
 [tasks.precommit]
 description = "Run all pre-commit hooks via prek"
 run = "prek run"
+
+[tasks.precommit-validate]
+description = "Validate the prek pre-commit configuration"
+run = "prek validate-config"
 
 [tasks.download-schema]
 description = "Download GraphQL schema from github.com"

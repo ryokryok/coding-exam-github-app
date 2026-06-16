@@ -37,10 +37,10 @@ function Stat({
   value: number;
 }) {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <Icon aria-hidden className="text-4xl text-zinc-400 dark:text-zinc-500" />
+    <div className="flex flex-col items-center gap-1 rounded-xl border-2 border-(--neo-line) bg-white px-2 py-4 shadow-[4px_4px_0_0_var(--neo-shadow)] dark:bg-zinc-950">
+      <Icon aria-hidden className="text-4xl text-zinc-500 dark:text-zinc-400" />
       <span className="text-sm text-zinc-500">{label}</span>
-      <span className="text-2xl font-semibold text-black dark:text-zinc-50">
+      <span className="text-2xl font-bold text-black dark:text-zinc-50">
         {value.toLocaleString()}
       </span>
     </div>

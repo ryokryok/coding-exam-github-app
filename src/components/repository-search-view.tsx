@@ -56,15 +56,15 @@ export function RepositorySearchView({
           value={input}
           onChange={(event) => setInput(event.target.value)}
           placeholder="リポジトリ名を入力してください"
-          className="flex-1 rounded-md border-2 border-zinc-300 px-4 py-2 text-base tracking-wide outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
+          className="flex-1 rounded-lg border-2 border-(--neo-line) bg-white px-4 py-2 text-base tracking-wide text-black outline-none placeholder:text-zinc-400 dark:bg-zinc-950 dark:text-zinc-50"
         />
         <button
           type="submit"
           disabled={!canSubmit}
-          className={`rounded-md border-2 border-transparent px-5 py-2 text-lg font-bold tracking-wider transition-colors ${
+          className={`rounded-lg border-2 px-5 py-2 text-lg font-bold tracking-wider transition-all ${
             canSubmit
-              ? "bg-green-700 text-white hover:bg-green-800 dark:bg-green-700 dark:hover:bg-green-600"
-              : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+              ? "border-(--neo-line) bg-green-400 text-black shadow-[4px_4px_0_0_var(--neo-shadow)] hover:-translate-y-0.5 hover:bg-green-300 hover:shadow-[6px_6px_0_0_var(--neo-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_0_var(--neo-shadow)]"
+              : "cursor-not-allowed border-zinc-300 bg-zinc-100 text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
           }`}
         >
           検索

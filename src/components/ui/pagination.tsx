@@ -26,7 +26,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-0.5", className)}
+      className={cn("flex items-center gap-2", className)}
       {...props}
     />
   );
@@ -51,7 +51,11 @@ function PaginationLink({
     <Button
       variant={isActive ? "outline" : "ghost"}
       size={size}
-      className={cn(className)}
+      className={cn(
+        "border-2 border-(--neo-line) bg-white text-black shadow-[3px_3px_0_0_var(--neo-shadow)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow-200 hover:text-black hover:shadow-[5px_5px_0_0_var(--neo-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_var(--neo-shadow)] dark:bg-zinc-950 dark:text-zinc-50",
+        isActive && "bg-green-400 dark:bg-green-500 dark:text-black",
+        className,
+      )}
       nativeButton={false}
       render={
         <Link

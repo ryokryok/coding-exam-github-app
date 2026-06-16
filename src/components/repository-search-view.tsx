@@ -56,7 +56,7 @@ export function RepositorySearchView({
           value={input}
           onChange={(event) => setInput(event.target.value)}
           placeholder="リポジトリ名を入力してください"
-          className="flex-1 rounded-lg border-2 border-(--neo-line) bg-white px-4 py-2 text-base tracking-wide text-black outline-none placeholder:text-zinc-400 dark:bg-zinc-950 dark:text-zinc-50"
+          className="flex-1 rounded-lg border-2 border-(--neo-line) bg-white px-4 py-2 text-base tracking-wide text-black outline-none transition-colors placeholder:text-zinc-400 focus:border-green-500 dark:bg-zinc-950 dark:text-zinc-50"
         />
         <button
           type="submit"

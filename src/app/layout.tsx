@@ -1,23 +1,18 @@
 import type { Metadata } from "next";
-import { DotGothic16, Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
 import type { ReactNode } from "react";
 import { PageHeader } from "@/components/page-header";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-// ページ全体に適用するドット系日本語フォント。weight は 400 のみ。
-const dotGothic16 = DotGothic16({
-  weight: "400",
-  variable: "--font-dot-gothic",
+// ページ全体に適用するポップな丸ゴシック（日本語対応）。UI で使う 400/500/700。
+const mPlusRounded = M_PLUS_Rounded_1c({
+  weight: ["400", "500", "700"],
+  variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
 });
@@ -35,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${geistSans.variable} ${geistMono.variable} ${dotGothic16.variable} h-full antialiased`}
+      className={`${mPlusRounded.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <div className="flex flex-1 flex-col bg-white dark:bg-black">

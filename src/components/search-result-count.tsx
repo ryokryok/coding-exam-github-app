@@ -7,7 +7,7 @@
 export function SearchResultCount({ total }: { total?: number }) {
   const loaded = total !== undefined;
   return (
-    <p className="border-b-2 border-zinc-200 bg-white py-2 text-base font-medium tracking-wider text-zinc-800 dark:border-zinc-800 dark:bg-black dark:text-zinc-100">
+    <p className="w-fit rounded-lg border-2 border-(--neo-line) bg-yellow-300 px-3 py-1 text-base font-bold tracking-wider text-black shadow-[3px_3px_0_0_var(--neo-shadow)]">
       {loaded ? (
         `${total.toLocaleString()} 件`
       ) : (

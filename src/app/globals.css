@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* 文字を枠線色で縁取る（ネオブルータリズムのロゴ用）。paint-order で
+   縁取りを文字の下に敷き、塗りが細らないようにする。 */
+@utility text-outline {
+  -webkit-text-stroke: 2px var(--neo-line);
+  paint-order: stroke;
+}
+
 :root {
   /* sticky なページヘッダーの重なり順。 */
   --index-header: 30;
@@ -31,6 +38,9 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
+  /* ネオブルータリズム: 太枠線とハードシャドウの色（ダークで反転）。 */
+  --neo-line: #000;
+  --neo-shadow: #000;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -91,12 +101,15 @@ html {
 }
 
 body {
-  font-family: var(--font-dot-gothic), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
+  /* ダークでは枠線・影を白系に反転して黒背景でも見えるようにする。 */
+  --neo-line: #fafafa;
+  --neo-shadow: #fafafa;
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);

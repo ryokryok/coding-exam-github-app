@@ -6,7 +6,7 @@ import Link from "next/link";
  * これを変えると両者が同時に変わり、レイアウトシフトを防ぐ。
  */
 export const CARD_FRAME =
-  "flex items-center gap-4 rounded-xl border-2 border-zinc-200 px-5 py-4 dark:border-zinc-800";
+  "flex items-center gap-4 rounded-xl border-2 border-(--neo-line) bg-white px-5 py-4 text-black shadow-[5px_5px_0_0_var(--neo-shadow)] dark:bg-zinc-950 dark:text-zinc-50";
 
 /**
  * カード表示に必要なプレーンなデータ。
@@ -35,7 +35,7 @@ export function RepositoryCard({
   return (
     <Link
       href={`/repos/${ownerLogin}/${name}`}
-      className={`${CARD_FRAME} transition-colors hover:border-zinc-400 hover:bg-zinc-50 dark:hover:border-zinc-600 dark:hover:bg-zinc-900`}
+      className={`${CARD_FRAME} transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow-200 hover:shadow-[7px_7px_0_0_var(--neo-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_0_var(--neo-shadow)] dark:hover:bg-zinc-800`}
     >
       <Image
         src={avatarUrl}

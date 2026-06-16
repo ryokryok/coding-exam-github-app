@@ -93,6 +93,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.2
         version: 6.0.2(vite@8.0.16(@types/node@20.19.42)(jiti@2.7.0)(yaml@2.9.0))
+      graphql-config:
+        specifier: ^5.1.6
+        version: 5.1.6(@types/node@20.19.42)(graphql@16.14.2)(typescript@5.9.3)
       happy-dom:
         specifier: ^20.10.4
         version: 20.10.4

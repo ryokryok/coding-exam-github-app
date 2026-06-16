@@ -13,7 +13,7 @@
       "!.next",
       "!dist",
       "!build",
-      "!src/lib/gql"
+      "!src/lib/gql/**/*"
     ]
   },
   "formatter": {

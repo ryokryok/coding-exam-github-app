@@ -37,4 +37,13 @@ test.describe("リポジトリ詳細", () => {
     // 検索へ戻るリンクが表示される
     await expect(page.getByRole("link", { name: "検索に戻る" })).toBeVisible();
   });
+
+  test("取得エラー時はエラーページが表示される", async ({ page }) => {
+    await page.goto("/repos/foo/error");
+
+    // 通信/取得エラーは error.tsx で受け止められる
+    await expect(
+      page.getByRole("heading", { name: "エラーが発生しました" }),
+    ).toBeVisible();
+  });
 });

@@ -13,11 +13,17 @@ describe("RepositoryCard", () => {
   it("リポジトリ名と詳細ページへのリンクを表示する", () => {
     render(<RepositoryCard {...props} />);
 
-    expect(screen.getByText("dummy-owner/dummy-repo")).toBeInTheDocument();
-    expect(screen.getByRole("link")).toHaveAttribute(
-      "href",
-      "/repos/dummy-owner/dummy-repo",
-    );
+    // リンクのアクセシブル名にはアバターの alt も含まれるため部分一致で取得する。
+    const link = screen.getByRole("link", { name: /dummy-owner\/dummy-repo/ });
+    expect(link).toHaveAttribute("href", "/repos/dummy-owner/dummy-repo");
+  });
+
+  it("article ロールで囲み、リポジトリ名でラベル付けする", () => {
+    render(<RepositoryCard {...props} />);
+
+    expect(
+      screen.getByRole("article", { name: "dummy-owner/dummy-repo" }),
+    ).toBeInTheDocument();
   });
 
   it("オーナーのアバターを alt 付きで表示する", () => {

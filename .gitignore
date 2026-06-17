@@ -43,3 +43,11 @@ next-env.d.ts
 
 # GitHub API GraphQL スキーマ
 schema.docs.graphql
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

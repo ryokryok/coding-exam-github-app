@@ -31,9 +31,9 @@ describe("RepositorySearchView", () => {
       />,
     );
 
-    expect(
-      screen.getByText(/「dummy-query」に一致するリポジトリはありませんでした/),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      /「dummy-query」に一致するリポジトリはありませんでした/,
+    );
   });
 
   it("結果があるとき件数・カード・ページネーションを表示する", () => {
@@ -51,9 +51,13 @@ describe("RepositorySearchView", () => {
       />,
     );
 
-    expect(screen.getByText("200 件")).toBeInTheDocument();
-    expect(screen.getByText("dummy-owner/dummy-repo-1")).toBeInTheDocument();
-    expect(screen.getByText("dummy-owner/dummy-repo-3")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("200 件");
+    expect(
+      screen.getByRole("article", { name: "dummy-owner/dummy-repo-1" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("article", { name: "dummy-owner/dummy-repo-3" }),
+    ).toBeInTheDocument();
     // total=200 / pageSize=10 → 複数ページなのでページネーションが出る。
     expect(
       screen.getByRole("navigation", { name: /pagination/i }),

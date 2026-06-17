@@ -72,9 +72,9 @@ export function RepositorySearchView({
       </form>
 
       {query !== "" && !hasResults && (
-        <p className="text-sm text-zinc-500">
+        <output className="block text-sm text-zinc-500">
           「{query}」に一致するリポジトリはありませんでした。
-        </p>
+        </output>
       )}
 
       {hasResults && (

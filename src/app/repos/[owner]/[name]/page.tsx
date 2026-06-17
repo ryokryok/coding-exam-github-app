@@ -16,8 +16,13 @@ export default async function RepositoryDetailPage({ params }: PageProps) {
   }
 
   const { owner, name } = parsed.output;
-  const repository = await getRepository(owner, name);
 
+  // getRepository は「見つからない時は null、通信/GraphQL エラー時は throw」を返す。
+  // - null（存在しない・非公開）→ notFound() で NotFound ページ
+  // - throw（通信失敗など）→ そのまま伝播させ error.tsx で受け止める
+  // notFound() は内部で例外を throw して動くため、try-catch で囲んではいけない
+  // （catch が握りつぶすと NotFound が表示されない）。
+  const repository = await getRepository(owner, name);
   if (!repository) {
     notFound();
   }

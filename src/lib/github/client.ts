@@ -3,7 +3,7 @@ import { Client, cacheExchange, type Exchange, fetchExchange } from "urql";
 import { GITHUB_GRAPHQL_ENDPOINT } from "./constants";
 
 export type GitHubClientConfig = {
-  /** GitHub のアクセストークン。省略時は `GITHUB_API_TOKEN` 環境変数を使用する。 */
+  /** GitHub のアクセストークン。省略時は `API_TOKEN` 環境変数を使用する。 */
   token?: string;
   /** GraphQL エンドポイント URL。テスト時の差し替え用（既定: GitHub 本番）。 */
   url?: string;
@@ -18,8 +18,8 @@ export type GitHubClientConfig = {
  */
 export function createGitHubClient(config: GitHubClientConfig = {}): Client {
   const {
-    token = process.env.GITHUB_API_TOKEN,
-    url = process.env.GITHUB_API_ENDPOINT ?? GITHUB_GRAPHQL_ENDPOINT, // fallback として GitHub API の URL を指定する
+    token = process.env.API_TOKEN,
+    url = process.env.API_ENDPOINT ?? GITHUB_GRAPHQL_ENDPOINT, // fallback として GitHub API の URL を指定する
     exchanges = [cacheExchange, fetchExchange],
   } = config;
 

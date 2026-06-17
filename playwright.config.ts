@@ -42,7 +42,7 @@ export default defineConfig({
       command: "pnpm run start",
       url: "http://localhost:3000",
       reuseExistingServer: !process.env.CI,
-      // API の通信先は process.env.GITHUB_API_ENDPOINT で指定する
+      // API の通信先は process.env.API_ENDPOINT で指定する
     },
   ],
 });

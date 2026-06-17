@@ -5,7 +5,7 @@ import { createSchema, createYoga } from "graphql-yoga";
 /**
  * GitHub GraphQL API の E2E 用モックサーバー
  *
- * `process.env.GITHUB_API_ENDPOINT=http://localhost:4000` を指定したアプリから
+ * `process.env.API_ENDPOINT=http://localhost:4000` を指定したアプリから
  * そのまま叩けるよう、`graphqlEndpoint` を `/` にしてルートで受ける。
  *
  * 肝は抽象型の解決:
@@ -158,7 +158,7 @@ const schema = createSchema({
 
 const yoga = createYoga({
   schema,
-  // GITHUB_API_ENDPOINT=http://localhost:4000 をそのまま POST できるよう '/' で受ける。
+  // API_ENDPOINT=http://localhost:4000 をそのまま POST できるよう '/' で受ける。
   graphqlEndpoint: "/",
 });
 

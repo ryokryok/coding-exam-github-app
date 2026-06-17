@@ -3,14 +3,13 @@ import { render, screen } from "@testing-library/react";
 import { SearchResultCount } from "./search-result-count";
 
 describe("SearchResultCount", () => {
-  it("total を渡すと桁区切りで件数を表示する", () => {
+  it("total を渡すと桁区切りで件数を status として表示する", () => {
     render(<SearchResultCount total={1234} />);
-    expect(screen.getByText("1,234 件")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("1,234 件");
   });
 
-  it("total 未指定（読み込み中）はプレースホルダを表示し件数を出さない", () => {
-    const { container } = render(<SearchResultCount />);
-    expect(container.querySelector(".animate-pulse")).toBeInTheDocument();
-    expect(screen.queryByText(/件$/)).not.toBeInTheDocument();
+  it("total 未指定（読み込み中）は件数を出さない", () => {
+    render(<SearchResultCount />);
+    expect(screen.getByRole("status")).not.toHaveTextContent(/件/);
   });
 });

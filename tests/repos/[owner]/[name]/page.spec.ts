@@ -4,18 +4,23 @@ test.describe("リポジトリ詳細", () => {
   test("詳細が表示される", async ({ page }) => {
     await page.goto("/repos/foo/bar");
 
-    // 見出し
-    await expect(page.getByRole("heading", { name: "foo/bar" })).toBeVisible();
-    // 言語
-    await expect(page.getByText("TypeScript")).toBeVisible();
-    // star
-    await expect(page.getByText("1,500")).toBeVisible();
-    // watcher
-    await expect(page.getByText("80")).toBeVisible();
-    // fork
-    await expect(page.getByText("230")).toBeVisible();
-    // issue
-    await expect(page.getByText("12")).toBeVisible();
+    // 詳細全体は article で囲まれる
+    const detail = page.getByRole("article", { name: "foo/bar" });
+    await expect(detail).toBeVisible();
+    // 見出しが表示される
+    await expect(
+      detail.getByRole("heading", { level: 2, name: "foo/bar" }),
+    ).toBeVisible();
+    // 言語が表示される
+    await expect(detail.getByText("TypeScript")).toBeVisible();
+
+    // Stats は dl/dt/dd で表示され、各 dd の値が検証される
+    const statValue = (label: string) =>
+      detail.locator("dl > div", { hasText: label }).getByRole("definition");
+    await expect(statValue("Star")).toHaveText("1,500");
+    await expect(statValue("Watcher")).toHaveText("80");
+    await expect(statValue("Fork")).toHaveText("230");
+    await expect(statValue("Issue")).toHaveText("12");
   });
 
   test("存在しないリポジトリは 404", async ({ page }) => {

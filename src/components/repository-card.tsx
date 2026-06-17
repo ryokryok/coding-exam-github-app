@@ -33,20 +33,22 @@ export function RepositoryCard({
   avatarUrl,
 }: RepositoryCardData) {
   return (
-    <Link
-      href={`/repos/${ownerLogin}/${name}`}
-      className={`${CARD_FRAME} transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow-200 hover:shadow-[7px_7px_0_0_var(--neo-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_0_var(--neo-shadow)] dark:hover:bg-zinc-800`}
-    >
-      <Image
-        src={avatarUrl}
-        alt={`${ownerLogin} のアイコン`}
-        width={40}
-        height={40}
-        className="shrink-0 rounded-full"
-      />
-      <span className="truncate text-base font-medium tracking-wide text-black dark:text-zinc-50">
-        {nameWithOwner}
-      </span>
-    </Link>
+    <article aria-label={nameWithOwner}>
+      <Link
+        href={`/repos/${ownerLogin}/${name}`}
+        className={`${CARD_FRAME} transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-yellow-200 hover:shadow-[7px_7px_0_0_var(--neo-shadow)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_0_var(--neo-shadow)] dark:hover:bg-zinc-800`}
+      >
+        <Image
+          src={avatarUrl}
+          alt={`${ownerLogin} のアイコン`}
+          width={40}
+          height={40}
+          className="shrink-0 rounded-full"
+        />
+        <span className="truncate text-base font-medium tracking-wide text-black dark:text-zinc-50">
+          {nameWithOwner}
+        </span>
+      </Link>
+    </article>
   );
 }

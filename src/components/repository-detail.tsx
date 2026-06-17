@@ -39,10 +39,10 @@ function Stat({
   return (
     <div className="flex flex-col items-center gap-1 rounded-xl border-2 border-(--neo-line) bg-white px-2 py-4 shadow-[4px_4px_0_0_var(--neo-shadow)] dark:bg-zinc-950">
       <Icon aria-hidden className="text-4xl text-zinc-500 dark:text-zinc-400" />
-      <span className="text-sm text-zinc-500">{label}</span>
-      <span className="text-2xl font-bold text-black dark:text-zinc-50">
+      <dt className="text-sm text-zinc-500">{label}</dt>
+      <dd className="text-2xl font-bold text-black dark:text-zinc-50">
         {value.toLocaleString()}
-      </span>
+      </dd>
     </div>
   );
 }
@@ -55,7 +55,7 @@ export function RepositoryDetail({
   const repo = useFragment(RepositoryDetailFragment, repository);
 
   return (
-    <>
+    <article aria-labelledby="repo-detail-heading">
       <div className="mt-6 flex items-center gap-4">
         <Image
           src={repo.owner.avatarUrl}
@@ -66,7 +66,10 @@ export function RepositoryDetail({
         />
         <div className="flex flex-col gap-1">
           <Link href={repo.url} target="_blank" rel="noreferrer">
-            <h2 className="text-2xl font-bold tracking-wider text-black hover:underline dark:text-zinc-50">
+            <h2
+              id="repo-detail-heading"
+              className="text-2xl font-bold tracking-wider text-black hover:underline dark:text-zinc-50"
+            >
               {repo.nameWithOwner}
             </h2>
           </Link>
@@ -76,12 +79,12 @@ export function RepositoryDetail({
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
+      <dl className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
         <Stat icon={VscStarEmpty} label="Star" value={repo.stargazerCount} />
         <Stat icon={CgEye} label="Watcher" value={repo.watchers.totalCount} />
         <Stat icon={CgGitFork} label="Fork" value={repo.forkCount} />
         <Stat icon={VscIssues} label="Issue" value={repo.issues.totalCount} />
-      </div>
-    </>
+      </dl>
+    </article>
   );
 }

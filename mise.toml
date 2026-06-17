@@ -7,7 +7,6 @@ pnpm = "10"
 prek = "0.4.4"
 pinact = "4.1.0"
 
-
 [tasks.precommit]
 description = "Run all pre-commit hooks via prek"
 run = "prek run"
@@ -23,3 +22,11 @@ run = "pinact run"
 [tasks.download-schema]
 description = "Download GraphQL schema from github.com"
 run = "curl -O https://docs.github.com/public/fpt/schema.docs.graphql"
+
+[tasks.e2e-test]
+description = "Execute E2E, build and production build"
+run = ["pnpm run build", "pnpm run test:e2e"]
+
+[tasks.e2e-show-report]
+description = "Display E2E tests report"
+run = ["pnpm exec playwright show-report"]

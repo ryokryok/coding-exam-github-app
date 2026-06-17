@@ -6,7 +6,7 @@
 
 ## 初期設定
 
-このプロジェクトは [mise](https://mise.jdx.dev) でツール（Node.js / pnpm / prek）のバージョンを管理しています。
+このプロジェクトは [mise](https://mise.jdx.dev) でツールのバージョンを管理しています。
 
 ```bash
 # https://github.com/settings/personal-access-tokens
@@ -47,3 +47,18 @@ pnpm codegen
 ![GraphQL クエリの入力補完の例](docs/assets/vscode-graphql.png)
 
 入力補完が出ない場合は、コマンドパレット（macOS: `Shift + Command + P` / Windows・Linux: `Ctrl + Shift + P`）で `GraphQL: Manual Restart`（`vscode-graphql.restart`）を実行して GraphQL サーバーを再起動してください。
+
+## E2E テスト
+
+Playwrightによるテストを実行します。
+
+```shell
+# mise run で対話式に選択しても OK
+mise run e2e-test
+```
+
+---
+
+## AI 活用で工夫した点
+
+WIP

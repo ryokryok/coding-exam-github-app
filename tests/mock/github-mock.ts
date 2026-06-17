@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { createSchema, createYoga } from "graphql-yoga";
 
 /**
- * GitHub GraphQL API の E2E 用モックサーバー（GraphQL Yoga）。
+ * GitHub GraphQL API の E2E 用モックサーバー
  *
  * `process.env.GITHUB_API_ENDPOINT=http://localhost:4000` を指定したアプリから
  * そのまま叩けるよう、`graphqlEndpoint` を `/` にしてルートで受ける。
@@ -14,13 +14,11 @@ import { createSchema, createYoga } from "graphql-yoga";
  * いずれも fixture の `__typename` を返すだけで解決できる。
  */
 
-/** モックサーバーのポート（既定 4000）。 */
-const PORT = Number(process.env.MOCK_PORT) || 4000;
+/** モックサーバーのポート */
+const PORT = 4000;
 
-// codegen と同じ本物の GitHub スキーマ（git-ignored）をそのまま使う。手書きスキーマを
-// 二重管理しないことで、実 API とのフィールド名・null 許容・引数のズレを防ぐ。
-// pnpm スクリプトはリポジトリルートで実行されるため cwd 相対で読む。
-// 未取得なら `mise run download-schema` で取得する（codegen と同じ前提）。
+// codegen と同じ本物の GitHub スキーマ（git-ignored）をそのまま使う
+// 未取得なら `mise run download-schema` で取得する
 const SCHEMA_PATH = "schema.docs.graphql";
 let typeDefs: string;
 try {
@@ -58,7 +56,7 @@ const makeOwner = (over: Partial<Owner> = {}): Owner => ({
   __typename: "User", // RepositoryOwner interface の解決に必須
   login: "foo",
   // avatarUrl のホストは next.config の remotePatterns に合わせる必要がある。
-  avatarUrl: "https://avatars.githubusercontent.com/u/1?v=4",
+  avatarUrl: "https://avatars.githubusercontent.com/u/31591832",
   ...over,
 });
 
@@ -67,7 +65,7 @@ const makeRepo = (over: Partial<Repo> = {}): Repo => ({
   id: "R_foobar",
   name: "bar",
   nameWithOwner: "foo/bar",
-  url: "https://github.com/foo/bar",
+  url: "https://example.com/foo/bar",
   stargazerCount: 1500,
   forkCount: 230,
   watchers: { totalCount: 80 },
@@ -106,7 +104,7 @@ const schema = createSchema({
             id: "R_foobaz",
             name: "baz",
             nameWithOwner: "foo/baz",
-            url: "https://github.com/foo/baz",
+            url: "https://example.com/foo/baz",
             stargazerCount: 42,
             primaryLanguage: null,
           }),
@@ -119,7 +117,7 @@ const schema = createSchema({
         return makeRepo({
           name: args.name,
           nameWithOwner: `${args.owner}/${args.name}`,
-          url: `https://github.com/${args.owner}/${args.name}`,
+          url: `https://example.com/${args.owner}/${args.name}`,
           owner: makeOwner({ login: args.owner }),
         });
       },

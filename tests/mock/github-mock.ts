@@ -75,13 +75,45 @@ const makeRepo = (over: Partial<Repo> = {}): Repo => ({
   ...over,
 });
 
-const connection = (nodes: Repo[]) => ({
-  repositoryCount: nodes.length,
+/** 検索総数。10 件/ページなので 5 ページ分になり、ページネーションが表示される。 */
+const TOTAL_COUNT = 42;
+
+/**
+ * 1ページ目に表示する 10 件。先頭2件は既存テストが参照する foo/bar・foo/baz。
+ * 2ページ目以降は見ないので用意しない（mock は after を無視して常にこの1ページを返す）。
+ */
+const FIRST_PAGE: Repo[] = [
+  makeRepo(),
+  makeRepo({
+    id: "R_foobaz",
+    name: "baz",
+    nameWithOwner: "foo/baz",
+    url: "https://example.com/foo/baz",
+    stargazerCount: 42,
+    primaryLanguage: null,
+  }),
+  ...Array.from({ length: 8 }, (_, i) => {
+    const n = i + 3;
+    return makeRepo({
+      id: `R_foo_${n}`,
+      name: `repo-${n}`,
+      nameWithOwner: `foo/repo-${n}`,
+      url: `https://example.com/foo/repo-${n}`,
+    });
+  }),
+];
+
+const connection = (
+  nodes: Repo[],
+  total: number = nodes.length,
+  hasNextPage = false,
+) => ({
+  repositoryCount: total,
   pageInfo: {
-    hasNextPage: false,
+    hasNextPage,
     hasPreviousPage: false,
     startCursor: null,
-    endCursor: null,
+    endCursor: hasNextPage ? "Y3Vyc29yOjEw" : null,
   },
   nodes,
 });
@@ -91,24 +123,15 @@ const schema = createSchema({
   resolvers: {
     Query: {
       // query 文字列で挙動を切り替える（ヘッダー転送なしで URL だけで検証できる）。
-      //   "error" を含む → 例外 / "empty" or "no-hit" を含む → 0 件 / それ以外 → 2 件
+      //   "error" を含む → 例外 / "empty" or "no-hit" を含む → 0 件
+      //   それ以外 → 全 42 件の 1 ページ目（10 件, hasNextPage: true）
       search: (_parent: unknown, args: { query: string }) => {
         const q = args.query.toLowerCase();
         if (q.includes("error")) throw new Error("Mocked search failure");
         if (q.includes("empty") || q.includes("no-hit")) {
           return connection([]);
         }
-        return connection([
-          makeRepo(),
-          makeRepo({
-            id: "R_foobaz",
-            name: "baz",
-            nameWithOwner: "foo/baz",
-            url: "https://example.com/foo/baz",
-            stargazerCount: 42,
-            primaryLanguage: null,
-          }),
-        ]);
+        return connection(FIRST_PAGE, TOTAL_COUNT, true);
       },
       // name で挙動を切り替える。"not-found" → null（404）/ "error" → 例外 / それ以外 → 該当 repo
       repository: (_parent: unknown, args: { owner: string; name: string }) => {

@@ -1,7 +1,7 @@
-import { defineConfig, devices } from "@playwright/test";
-
-import dotenv from "dotenv";
 import path from "node:path";
+import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
+
 // ローカル環境なら、 .env.localを読み込む
 !process.env.CI &&
   dotenv.config({ path: path.resolve(__dirname, ".env.local") });

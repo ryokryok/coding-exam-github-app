@@ -30,10 +30,19 @@ export default defineConfig({
     },
   ],
 
-  /* Production環境での実行 事前にビルドは済ませておく前提 */
-  webServer: {
-    command: "pnpm run start",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-  },
+  /* GraphQL モックと Next.js（Production）を起動。事前にビルド済みである前提。 */
+  webServer: [
+    {
+      // GitHub GraphQL API のモック（port 4000）。GET '/' が GraphiQL(200) を返すので疎通確認に使える。
+      command: "pnpm run mock",
+      url: "http://localhost:4000",
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: "pnpm run start",
+      url: "http://localhost:3000",
+      reuseExistingServer: !process.env.CI,
+      // API の通信先は process.env.GITHUB_API_ENDPOINT で指定する
+    },
+  ],
 });

@@ -19,7 +19,7 @@ export type GitHubClientConfig = {
 export function createGitHubClient(config: GitHubClientConfig = {}): Client {
   const {
     token = process.env.GITHUB_API_TOKEN,
-    url = GITHUB_GRAPHQL_ENDPOINT,
+    url = process.env.GITHUB_API_ENDPOINT ?? GITHUB_GRAPHQL_ENDPOINT, // fallback として GitHub API の URL を指定する
     exchanges = [cacheExchange, fetchExchange],
   } = config;
 

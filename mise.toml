@@ -25,6 +25,7 @@ run = "curl -O https://docs.github.com/public/fpt/schema.docs.graphql"
 
 [tasks.e2e-test]
 description = "Execute E2E, build and production build"
+env = { GITHUB_API_ENDPOINT = "http://localhost:4000" }
 run = ["pnpm run build", "pnpm run test:e2e"]
 
 [tasks.e2e-show-report]

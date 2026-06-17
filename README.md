@@ -13,7 +13,7 @@
 # Fine-grained personal access tokens を作成する
 # 権限は Repository access : Public repositories のみで OK
 cp .env.sample .env.local
-# 作成したトークンを .env.local の GITHUB_API_TOKEN に設定する
+# 作成したトークンを .env.local の API_TOKEN に設定する
 
 # Node.js と pnpm の設定
 mise install

@@ -23,9 +23,18 @@ test.describe("リポジトリ詳細", () => {
     await expect(statValue("Issue")).toHaveText("12");
   });
 
-  test("存在しないリポジトリは 404", async ({ page }) => {
+  test("存在しないリポジトリは NotFound ページが表示される", async ({
+    page,
+  }) => {
     const response = await page.goto("/repos/foo/not-found");
 
+    // 404 が返される
     expect(response?.status()).toBe(404);
+    // NotFound の見出しが表示される
+    await expect(
+      page.getByRole("heading", { name: "リポジトリが見つかりませんでした" }),
+    ).toBeVisible();
+    // 検索へ戻るリンクが表示される
+    await expect(page.getByRole("link", { name: "検索に戻る" })).toBeVisible();
   });
 });

@@ -4,7 +4,9 @@ min_version = "2026.6.10"
 [tools]
 node = "24"
 pnpm = "10"
-prek = "latest"
+prek = "0.4.4"
+pinact = "4.1.0"
+
 
 [tasks.precommit]
 description = "Run all pre-commit hooks via prek"
@@ -13,6 +15,10 @@ run = "prek run"
 [tasks.precommit-validate]
 description = "Validate the prek pre-commit configuration"
 run = "prek validate-config"
+
+[tasks.workflow-check]
+description = "Pin GitHub Actions and Reusable Workflows"
+run = "pinact run"
 
 [tasks.download-schema]
 description = "Download GraphQL schema from github.com"
